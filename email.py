@@ -2,7 +2,7 @@ from openpyxl import load_workbook
 import win32com.client
 
 def findlist():
-    wb = load_workbook('C:\\Users\\Ethan\\Desktop\\Project\\user list.xlsx')
+    wb = load_workbook('C:\\Users\\zzhuetan\\OneDrive - PERNOD RICARD\\Desktop\\user list.xlsx')
     ws = wb.active
     rows_data = list(ws.rows)
     titles = [title.value for title in rows_data.pop(0)]
@@ -14,19 +14,18 @@ def findlist():
 
     return all_row_dict
 
-
 def outlook(count):
     userlist = findlist()
     outlook = win32com.client.Dispatch("Outlook.Application")
     # outlook = win32com.client.DispatchEx("Outlook.Application")
     # outlook.Visible = 0
-    msg = outlook.GetNamespace("MAPI").OpenSharedItem(r"C:\\Users\\Ethan\\Desktop\\Project\\Check-in 2022 - Basic.msg")
+    msg = outlook.GetNamespace("MAPI").OpenSharedItem("C:\\Users\\zzhuetan\\OneDrive - PERNOD RICARD\\Desktop\\有关IT的支持，可以联系我们！.msg")
+
     for i in range(count):
         firstname = userlist[i]['User First Name']
         useremailaddr = userlist[i]['Email']
-        msg.HTMLBody = msg.HTMLBody.replace('%%FirstName%%','{},'.format(firstname))
         mail = outlook.CreateItem(0)
-        mail.HTMLBody = msg.HTMLBody
+        mail.HTMLBody = msg.HTMLBody.replace('%%FirstName%%','{},'.format(firstname))
         mail.To = useremailaddr
         mail.Subject = '有关IT的支持，可以联系我们！'
         mail.BodyFormat = 2  # 2表示使用Html format
